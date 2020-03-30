@@ -1,26 +1,12 @@
 import React from 'react';
-import firebase from 'firebase';
-
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
+import {Image } from 'react-bootstrap';
 
 class ProjectList extends React.Component{
-    // state={
-    //     isSignedIn: false,
-    //     user: null
-    // }
-    // componentDidMount(){
-    //     firebase.auth().onAuthStateChanged((user)=>{
-    //         if(user){
-    //             this.setState({
-    //                 isSignedIn: !!user,
-    //                 user: user
-    //             })
-    //         }
-    //     })
-    // }
+    
     render(){
         const {projects,auth}=this.props;
         console.log("projects",projects);
@@ -30,10 +16,13 @@ class ProjectList extends React.Component{
                 {(auth.uid)?
                 (
                     <div className="center">
+                     <Image src={auth.photoURL} roundedCircle/> 
                      <h1>Welcome {auth.displayName}</h1>
                      <Link to="/createProject">
                      <h3>Create A New Project</h3>
                      </Link>
+                     <h1>Projects You Are a Part Of</h1>
+                     <div>Seems like you aren't part of any project</div>
                      <h1>List Of Projects You Started</h1>
                      {projects && projects.map(project=>{
                         return (project.createdBy===auth.uid)
@@ -51,7 +40,7 @@ class ProjectList extends React.Component{
                 (
                 <div>
                 <h1>Not Signed In!</h1>
-                Sign In Here.
+                <a href="/">Sign In Here.</a>
                 </div>
                 )}
                 

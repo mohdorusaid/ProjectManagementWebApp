@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {signInWithGoogle,SignOut} from '../../store/actions/authActions';
-import { Link  } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 class SignInAsync extends React.Component{
     state={
@@ -26,8 +26,10 @@ class SignInAsync extends React.Component{
                 {(auth.uid)?(
                     <div>
                     <h1>Signed In!</h1>
+                    <div>
+                    <Link to="/projects">Click me!</Link>
+                    </div>
                     <Button onClick={this.handleSignOut}>Sign Out!</Button>
-                    <Link to="/projects">Go To projects</Link>
                     </div>
                 ):(
                     <Button onClick={this.handleSignIn}>Sign In With Google</Button>
