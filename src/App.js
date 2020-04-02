@@ -5,8 +5,6 @@ import ProjectList from './components/projects/ProjectList';
 import ProjectDashboard from './components/projects/ProjectDashboard';
 import CreateProject from './components/projects/CreateProject';
 import SignInAsync from './components/auth/SignInAsync';
-import MessageBoard from './components/projects/MessageBoard';
-
 class App extends React.Component{
   render(){
   return (

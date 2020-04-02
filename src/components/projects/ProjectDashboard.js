@@ -7,8 +7,15 @@ import { Tabs,Tab } from 'react-bootstrap';
 import MessageBoard from './MessageBoard';
 import UsersList from './UsersList';
 import AssignTask from './AssignTask';
+import { getCurrentProject } from '../../store/actions/projectActions';
 
 class ProjectDashboard extends React.Component{
+    
+    componentDidMount(){
+        const currID=(this.props.match.params.id);
+        this.props.getCurrentPoject(currID);
+    }
+
     render(){
         //destructure props
 
@@ -26,7 +33,6 @@ class ProjectDashboard extends React.Component{
                 (currentProject && currentProject[0].createdBy===auth.uid)?
                 (
                     <div style={{alignContent:"center",textAlign:"center"}}>
-                    {}
                     <h1>Authorized To Access The Project.</h1>
                     <h2>Project Dashboard</h2>
                     <Tabs defaultActiveKey="you" id="uncontrolled-tab-example">
@@ -35,15 +41,11 @@ class ProjectDashboard extends React.Component{
                       <h2>{currentProject[0].title}</h2>
                     </Tab>
                     <Tab eventKey="announcements" title="Announcements">
-                        {(messages)?
-                        (<MessageBoard messages={messages}/>)
-                        :
-                        (null)}
-                        
+                        <MessageBoard id={currentProject[0].id}/>       
                     </Tab>
                     <Tab eventKey="assignTask" title="Assign Tasks">
                         <h1>Assign Task Here</h1>
-                        <AssignTask users={users}/>
+                        <AssignTask users={currentProject[0].members} id={currentProject[0].id}/>
 
                     </Tab>
                     <Tab eventKey="addUsers" title="Add User">
@@ -70,28 +72,22 @@ const mapStateToProps=(state)=>{
         projects: state.firestore.ordered.projects,
         auth: state.firebase.auth,
         users: state.firestore.ordered.appUsers,
-        messages: state.firestore.ordered.myMessages
+        currentProject: state.projects
     }
 }
 
-const mapDisptachToProps=(dispatch)=>{
+const mapDispatchToProps=(dispatch)=>{
     return{
-        
+        getCurrentPoject: (id)=>dispatch(getCurrentProject(id))
     }
 }
 
-export default compose(connect(mapStateToProps),firestoreConnect([
-    {
-    collection: 'projects'
-},{
-    collection: 'appUsers'
-},{
-    collection: 'projects',
-    doc:'3iilgkxiLHc0L9FMQKpz',
-    storeAs: 'myMessages',
-    subcollections:[
-        {collection: 'messages',
-        }
-    ]
-}
-]))(ProjectDashboard);
+export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect((ownProps)=>{
+    return [
+        {
+        collection: 'projects',
+    },{
+        collection: 'appUsers'
+    }
+    ]  
+}))(ProjectDashboard);

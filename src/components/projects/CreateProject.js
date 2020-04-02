@@ -3,11 +3,11 @@ import { Form,Button } from 'react-bootstrap';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose} from 'redux';
 import { connect } from 'react-redux';
+import { createProject } from '../../store/actions/projectActions';
 
 class CreateProject extends React.Component{
     state={
         title:'',
-        createdBy:'',
         members:[]
     }
 
@@ -31,12 +31,13 @@ class CreateProject extends React.Component{
     handleSubmit=(e)=>{
         e.preventDefault();
         console.log(this.state);
+        this.props.createProject(this.state);
     }
 
     render(){
         const { auth,users }=this.props;
 
-        console.log(this.props)
+        //console.log(this.props)
         return(
             <div className="center">
                {(auth.uid)?(
@@ -80,8 +81,12 @@ const mapStateToProps=(state)=>{
     }
 }
 
+const mapDispatchToProps=(dispatch)=>{
+    return  {
+        createProject: (project)=>dispatch(createProject(project))
+    }
+}
 
-
-export default compose(connect(mapStateToProps),firestoreConnect([{
+export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([{
     collection: 'appUsers'
 }]))(CreateProject);

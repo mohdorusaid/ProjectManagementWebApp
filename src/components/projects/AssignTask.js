@@ -1,5 +1,9 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { createToDo } from '../../store/actions/toDoActions';
+import { connect } from 'react-redux'
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
 
 class AssignTask extends React.Component{
     state={
@@ -21,12 +25,15 @@ class AssignTask extends React.Component{
 
     handleSubmit=(e)=>{
         e.preventDefault();
+        this.props.createToDo(this.state);
         console.log(this.state);
+
     }
 
 
     render(){
        const { users }= this.props;
+       //console.log(this.props);
         return(
             <Form>
                 <Form.Group controlId="todo">
@@ -38,7 +45,7 @@ class AssignTask extends React.Component{
                     <Form.Control as="select" onChange={this.handleSelect}>
                         {users && users.map(user=>{
                             return(
-                              <option key={user.id} value={user.userId}>{user.userId}</option>
+                              <option key={user} value={user}>{user}</option>
                             )
                         })}
                     </Form.Control>
@@ -51,4 +58,13 @@ class AssignTask extends React.Component{
     }
 }
 
-export default AssignTask;
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        createToDo: (todo)=>dispatch(createToDo(todo))
+    }
+}
+
+
+export default compose(connect(null,mapDispatchToProps),firestoreConnect([{
+    collection: 'appUsers'
+}]))(AssignTask);
