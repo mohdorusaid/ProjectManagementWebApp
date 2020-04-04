@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Card } from 'react-bootstrap';
 import {connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -31,20 +31,26 @@ class MessageBoard extends React.Component{
         console.log(this.props);
         return(
             <Container>
+                <div className="message-center" style={{height:"80%",overflow:"scroll"}}>
                 {messages && messages.map(messageInd=>{
                     return(
-                        <div key={messageInd.id}>
-                         <h1>Message by:-{messageInd.sender}</h1>
-                         <p>{messageInd.message}</p>
-                        </div>
+                        <Card key={messageInd.id} style={{margin:"5px"}}>
+                        <Card.Title>
+                            <h4>{messageInd.sender}</h4>
+                        </Card.Title>
+                        <Card.Body>
+                            {messageInd.message}
+                        </Card.Body>
+                        </Card>
                     )
                 })}
+                </div>
                 <div style={{position:"absolute",bottom:"0",textAlign:"center"}}>
-                    <Form>
+                    <Form inline>
                         <Form.Group controlId="message">
                             <Form.Control type="text" placeholder="Write" onChange={this.handleChange}/>
                         </Form.Group>
-                        <Button type="submit" color="primary" onClick={this.handleSubmit}>Send</Button>
+                        <Button type="submit" color="primary" onClick={this.handleSubmit} style={{marginLeft:"20px"}}>Send</Button>
                     </Form>
                 </div>
             </Container>

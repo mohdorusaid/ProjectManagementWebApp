@@ -2,7 +2,7 @@ import React from 'react';
 import {compose} from 'redux';
 import {firestoreConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
-import {Container} from 'react-bootstrap';
+import {Container, Card} from 'react-bootstrap';
 
 class ProgressReport extends React.Component{
     render(){
@@ -12,11 +12,14 @@ class ProgressReport extends React.Component{
             <Container>
                 <h1>Progress Report</h1>
                 {todos && todos.map(todo=>{
-                   return <div key={todo.id}>
-                    <h1>Todo assigned to: {todo.user}</h1>
-                    <h2>Todo: {todo.todo}</h2>
-                    <h3>Status: {todo.isComplete?("Complete"):("Not Complete")}</h3>
-                    </div>
+                   return(
+                       <Card key={todo.id} style={{margin:"5px"}}>
+                            <Card.Title>{todo.todo}</Card.Title>
+                           <Card.Body>
+                                <p>Status:{(todo.isComplete)?("Complete"):("Not Complete")}</p>
+                           </Card.Body>
+                       </Card>
+                   )
                 })}
             </Container>
         )

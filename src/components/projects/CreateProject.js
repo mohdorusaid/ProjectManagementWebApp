@@ -57,11 +57,16 @@ class CreateProject extends React.Component{
                         <h1>Select Members To Add As Users.</h1>
                         {users && users.map(user=>{
                             return(
-                            <div key={user.id}>
-                            <input type="checkbox" name={user.displayName} value={user.photoURL} onChange={this.handleChecks} id={user.userId}/>
-                            <h5>{user.userId}</h5>
-                            <h5>{user.displayName}</h5>
-                            </div>
+                            (user.userId===auth.uid)?(
+                               null
+                            ):(
+                                <div key={user.id}>
+                                <input type="checkbox" name={user.displayName} value={user.photoURL} onChange={this.handleChecks} id={user.userId}/>
+                                <h5>{user.userId}</h5>
+                                <h5>{user.displayName}</h5>
+                                </div>
+                                )
+                            
                             )
                         })}
                         <Button variant="primary" type="submit" onClick={this.handleSubmit}>

@@ -3,8 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
-import {Image } from 'react-bootstrap';
-import { Tabs,Tab } from 'react-bootstrap';
+import {Image, Row,Col,Tabs,Tab,Card } from 'react-bootstrap';
 import { createUser } from '../../store/actions/userActions';
 
 class ProjectList extends React.Component{
@@ -20,6 +19,7 @@ class ProjectList extends React.Component{
             }
         }
     }
+
     render(){
         const {projects,auth,users}=this.props;
         console.log(users);
@@ -28,9 +28,17 @@ class ProjectList extends React.Component{
             <div className="center">
                 {(auth.uid && users)?
                 (
-                    <div className="center">
-                     <Image src={auth.photoURL} roundedCircle/> 
-                     <h1>Welcome {auth.displayName}</h1>
+                    <div style={{textAlign:"center",marginTop:"5%"}}>
+                        <Row>
+                            <Col md={8} xs={12}>
+                            <h1>Welcome, {auth.displayName}!</h1>
+                            </Col>
+                            <Col md={4} xs={12}>
+                            <Image src={auth.photoURL} roundedCircle/>
+                            </Col>
+                        </Row>
+                     
+                     
                      <Tabs id="Home">
                          <Tab eventKey="projectsCreated" title="Projects You've Started">
                          <h1>List Of Projects You Started</h1>
@@ -38,9 +46,13 @@ class ProjectList extends React.Component{
                             return (project.createdBy===auth.uid)
                             ?
                             (
-                            <Link to={'/projects/'+project.id} key={project.id}>
-                            <h1 >{project.title}</h1>
-                            </Link>
+                            <Card key={project.id}>
+                                <Card.Body>
+                                <Card.Title>{project.title}</Card.Title>
+                                <Card.Subtitle>{project.members.length} Members.</Card.Subtitle>
+                                <Card.Link href={"/projects/"+project.id}>Go To Project</Card.Link>
+                                </Card.Body>
+                            </Card>
                             )
                             :
                             (null)
@@ -55,9 +67,13 @@ class ProjectList extends React.Component{
                          <h1>Projects You Are a Part Of</h1>
                           {projects && projects.map(project=>{
                               return (project.members.some(member=>member.userId===auth.uid))?(
-                                  <Link to={'/projects/'+project.id}>
-                                      <h1>{project.title}</h1>
-                                  </Link>
+                                <Card key={project.id}>
+                                <Card.Body>
+                                <Card.Title>{project.title}</Card.Title>
+                                <Card.Subtitle>{project.members.length} Members.</Card.Subtitle>
+                                <Card.Link href={"/projects/"+project.id}>Go To Project</Card.Link>
+                                </Card.Body>
+                            </Card>
                               ):(
                                   null
                               )

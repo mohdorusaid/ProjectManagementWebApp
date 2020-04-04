@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Card } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -30,12 +30,21 @@ class ProjectDashboard extends React.Component{
                 (currentProject && currentProject[0].createdBy===auth.uid)?
                 (
                     <div style={{alignContent:"center",textAlign:"center"}}>
-                    <h1>Authorized To Access The Project.</h1>
                     <h2>Project Dashboard</h2>
-                    <Tabs defaultActiveKey="you" id="uncontrolled-tab-example">
+                    <Tabs defaultActiveKey="home" id="home">
                     <Tab eventKey="home" title="Home">
                       <h1>Important Details</h1>
                       <h2>{currentProject[0].title}</h2>
+                      <h3>Members</h3>
+                      {currentProject[0].members.map(member=>{
+                         return <Card style={{height:"30%"}} key={member.id}>
+                              <Card.Img variant="top" src={member.photoURL}/>
+                              <Card.Body>
+                                <Card.Title>{member.displayName}</Card.Title>
+                                <Card.Text>{member.userId}</Card.Text>
+                              </Card.Body>
+                                </Card>
+                      })}
                     </Tab>
                     <Tab eventKey="announcements" title="Announcements">
                         <MessageBoard id={currentProject[0].id}/>       
@@ -56,12 +65,21 @@ class ProjectDashboard extends React.Component{
                 (currentProject && currentProject[0].members.some(member=>member.userId===auth.uid))?
                 (
                     <div style={{alignContent:"center",textAlign:"center"}}>
-                    <h1>Authorized To Access The Project.</h1>
                     <h2>Project Dashboard</h2>
                     <Tabs defaultActiveKey="you" id="uncontrolled-tab-example">
                     <Tab eventKey="home" title="Home">
                       <h1>Important Details</h1>
                       <h2>{currentProject[0].title}</h2>
+                      <h3>Members</h3>
+                      {currentProject[0].members.map(member=>{
+                         return <Card style={{height:"30%"}} key={member.id}>
+                              <Card.Img variant="top" src={member.photoURL}/>
+                              <Card.Body>
+                                <Card.Title>{member.displayName}</Card.Title>
+                                <Card.Text>{member.userId}</Card.Text>
+                              </Card.Body>
+                                </Card>
+                      })}
                     </Tab>
                     <Tab eventKey="announcements" title="Announcements">
                         <MessageBoard id={currentProject[0].id}/>       
