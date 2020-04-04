@@ -11,7 +11,7 @@ const rootReducer=combineReducers({
     firestore: firestoreReducer,
     firebase: firebaseReducer,
     auth: authReducer,
-    user: userReducer,
+    users: userReducer,
     projects: projectReducer,
     todos: toDoReducer,
     messages: messageReducer

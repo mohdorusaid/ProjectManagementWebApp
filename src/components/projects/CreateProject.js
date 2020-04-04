@@ -20,11 +20,17 @@ class CreateProject extends React.Component{
     }
 
     handleChecks=(e)=>{
+        
         if(e.target.checked){
-                 this.newMembers.push(e.target.value)
-                 this.setState({
-                     members: this.newMembers
-                 }) 
+            console.log(e.target.value)
+                this.newMembers.push({
+                      userId: e.target.id,
+                      displayName: e.target.name,
+                      photoURL: e.target.value
+                     })
+                  this.setState({
+                      members: this.newMembers
+                  }) 
              }
     }
 
@@ -52,8 +58,9 @@ class CreateProject extends React.Component{
                         {users && users.map(user=>{
                             return(
                             <div key={user.id}>
-                            <input type="checkbox" name="Users" value={user.userId} onChange={this.handleChecks}/>
+                            <input type="checkbox" name={user.displayName} value={user.photoURL} onChange={this.handleChecks} id={user.userId}/>
                             <h5>{user.userId}</h5>
+                            <h5>{user.displayName}</h5>
                             </div>
                             )
                         })}
@@ -77,7 +84,7 @@ class CreateProject extends React.Component{
 const mapStateToProps=(state)=>{
     return {
         auth: state.firebase.auth,
-        users: state.firestore.ordered.appUsers
+        users: state.firestore.ordered.users
     }
 }
 
@@ -88,5 +95,5 @@ const mapDispatchToProps=(dispatch)=>{
 }
 
 export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([{
-    collection: 'appUsers'
+    collection: 'users'
 }]))(CreateProject);

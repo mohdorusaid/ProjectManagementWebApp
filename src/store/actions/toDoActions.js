@@ -18,3 +18,22 @@ export const createToDo=(todo)=>{
         
     }
 }
+
+export const markComplete=(id)=>{
+    return (dispatch,getState,{getFirestore})=>{
+        const firestore=getFirestore();
+        const currentProject=getState().projects.id;
+        firestore.collection('projects').doc(currentProject).collection('todos').doc(id).set(
+            {isComplete: true},{merge: true}
+        ).then(()=>{
+            dispatch({
+                type: 'TODO_COMPLETE_SUCCESS'
+            })
+        }).catch((err)=>{
+                dispatch({
+                    type:'TODO_COMPLETE_ERROR',
+                    err
+                })
+            })
+    }
+}

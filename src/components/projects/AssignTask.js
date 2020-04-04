@@ -32,8 +32,10 @@ class AssignTask extends React.Component{
 
 
     render(){
-       const { users }= this.props;
-       //console.log(this.props);
+       if(this.props.project){   
+       console.log(this.props.project[0].members);
+       var users= this.props.project[0].members
+    }
         return(
             <Form>
                 <Form.Group controlId="todo">
@@ -45,7 +47,7 @@ class AssignTask extends React.Component{
                     <Form.Control as="select" onChange={this.handleSelect}>
                         {users && users.map(user=>{
                             return(
-                              <option key={user} value={user}>{user}</option>
+                              <option key={user.userId} value={user.userId}>{user.displayName}</option>
                             )
                         })}
                     </Form.Control>
@@ -64,7 +66,15 @@ const mapDispatchToProps=(dispatch)=>{
     }
 }
 
+const mapStateToProps=(state)=>{
+    return{
+        project: state.firestore.ordered.project
+    }
+}
 
-export default compose(connect(null,mapDispatchToProps),firestoreConnect([{
-    collection: 'appUsers'
-}]))(AssignTask);
+export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect((ownProps)=>[{
+    collection: 'projects',
+    doc:ownProps.id,
+    storeAs: 'project'
+}
+]))(AssignTask);

@@ -14,7 +14,7 @@ export const createProject=(project)=>{
 }
 
 export const getCurrentProject=(id)=>{
-    console.log(id,"from dispatch");
+    //console.log(id,"from dispatch");
     return (dispatch)=>{
         dispatch({
             type:'GOT_CURRENT_PROJECT',

@@ -1,13 +1,11 @@
-
 export const createUser=(user)=>{
-    return (dispatch,getState,{getFirebase,getFirestore})=>{
+    return (dispatch,getState,{getFirestore})=>{
         const firestore=getFirestore();
-        firestore.collection('appUsers').add({
+        firestore.collection('users').add({
             ...user
         }).then(()=>{
             dispatch({
-                type:'ADD_USER_SUCCESS',
-                user
+                type:'ADD_USER_SUCCESS'
             })
         }).catch((err)=>{
             dispatch({
@@ -15,5 +13,7 @@ export const createUser=(user)=>{
                 err
             })
         })
+        //console.log(user);
+        
     }
 }

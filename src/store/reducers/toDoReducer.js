@@ -10,6 +10,16 @@ const toDoReducer=(state={},action)=>{
             return{
                 ...state
             }
+        case 'COMPLETE_TODO_SUCCESS':
+            console.log('complete todo success');
+            return{
+                ...state
+            }
+        case 'COMPLETE_TODO_ERROR':
+            console.log('complete todo error',action.err);
+            return{
+                ...state
+            }
         default:
             return state
     }

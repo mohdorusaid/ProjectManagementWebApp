@@ -5,9 +5,10 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Tabs,Tab } from 'react-bootstrap';
 import MessageBoard from './MessageBoard';
-import UsersList from './UsersList';
 import AssignTask from './AssignTask';
 import { getCurrentProject } from '../../store/actions/projectActions';
+import AssignedTasks from './AssignedTasks';
+import ProgressReport from './ProgressReport';
 
 class ProjectDashboard extends React.Component{
     
@@ -18,15 +19,11 @@ class ProjectDashboard extends React.Component{
 
     render(){
         //destructure props
-
-        const {projects,auth,users,messages}=this.props;
-        console.log(this.props);
-
-        //Get Current Project
-        const currentProject=projects && projects.filter(project=>
-           (project.id===this.props.match.params.id)
-        )
-        
+        const {projects,auth}=this.props;
+        const currentProject=projects;
+        if(currentProject){
+        console.log(currentProject[0])
+    }
         return(  
             <Container fluid>
             {(auth && auth.uid)?(
@@ -45,18 +42,41 @@ class ProjectDashboard extends React.Component{
                     </Tab>
                     <Tab eventKey="assignTask" title="Assign Tasks">
                         <h1>Assign Task Here</h1>
-                        <AssignTask users={currentProject[0].members} id={currentProject[0].id}/>
+                        <AssignTask id={currentProject[0].id}/>
 
                     </Tab>
-                    <Tab eventKey="addUsers" title="Add User">
-                       <UsersList/>
+                    <Tab eventKey="addUsers" title="Progress Report">
+                       <ProgressReport id={currentProject[0].id}/>
                     </Tab>
                     </Tabs>
                     </div>
                 )
                 :
                 (
-                    <h3>Not Authorized To Access.</h3>
+                (currentProject && currentProject[0].members.some(member=>member.userId===auth.uid))?
+                (
+                    <div style={{alignContent:"center",textAlign:"center"}}>
+                    <h1>Authorized To Access The Project.</h1>
+                    <h2>Project Dashboard</h2>
+                    <Tabs defaultActiveKey="you" id="uncontrolled-tab-example">
+                    <Tab eventKey="home" title="Home">
+                      <h1>Important Details</h1>
+                      <h2>{currentProject[0].title}</h2>
+                    </Tab>
+                    <Tab eventKey="announcements" title="Announcements">
+                        <MessageBoard id={currentProject[0].id}/>       
+                    </Tab>
+                    <Tab eventKey="assignTask" title="Assigned Tasks">
+                        <AssignedTasks id={currentProject[0].id}/>
+                    </Tab>
+                    </Tabs>
+                    </div>
+                    
+                    )
+                    :
+                    (
+                    <h1>Not Authorized To Access Project</h1>
+                    )
                 )
             ):(
                 <h1>Not Authenticated Yet!</h1>
@@ -78,7 +98,7 @@ const mapStateToProps=(state)=>{
 
 const mapDispatchToProps=(dispatch)=>{
     return{
-        getCurrentPoject: (id)=>dispatch(getCurrentProject(id))
+        getCurrentPoject: (id)=>dispatch(getCurrentProject(id)),
     }
 }
 
@@ -86,8 +106,10 @@ export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConn
     return [
         {
         collection: 'projects',
+        doc:ownProps.match.params.id,
+        storeAs: 'projects'
     },{
-        collection: 'appUsers'
+        collection: 'users'
     }
     ]  
 }))(ProjectDashboard);
