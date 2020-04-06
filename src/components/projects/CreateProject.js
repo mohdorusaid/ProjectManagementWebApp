@@ -49,22 +49,22 @@ class CreateProject extends React.Component{
                {(auth.uid)?(
                    <div style={{textAlign:"center"}}>
                     <h1>Signed in As: {auth.displayName}</h1>
+                    <h2>Create A Project Now.</h2>
                     <Form>
                         <Form.Group controlId="title" onChange={this.handleChange}>
                             <Form.Label>Project Title</Form.Label>
                             <Form.Control type="title" placeholder="Project Title" />
                         </Form.Group>
-                        <h1>Select Members To Add As Users.</h1>
+                        <h2>Select Members To Add As Users.</h2>
                         {users && users.map(user=>{
                             return(
                             (user.userId===auth.uid)?(
                                null
                             ):(
-                                <div key={user.id}>
+                                <span key={user.id}>
                                 <input type="checkbox" name={user.displayName} value={user.photoURL} onChange={this.handleChecks} id={user.userId}/>
-                                <h5>{user.userId}</h5>
                                 <h5>{user.displayName}</h5>
-                                </div>
+                                </span>
                                 )
                             
                             )

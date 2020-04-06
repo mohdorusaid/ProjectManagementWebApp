@@ -30,8 +30,8 @@ class MessageBoard extends React.Component{
         const {messages}=this.props;
         console.log(this.props);
         return(
-            <Container>
-                <div className="message-center" style={{height:"80%",overflow:"scroll"}}>
+            <div>
+                <div className="message-center" style={{height:"80%",overflow:"scroll",position:'absolute',width:"100%"}}>
                 {messages && messages.map(messageInd=>{
                     return(
                         <Card key={messageInd.id} style={{margin:"5px"}}>
@@ -53,7 +53,7 @@ class MessageBoard extends React.Component{
                         <Button type="submit" color="primary" onClick={this.handleSubmit} style={{marginLeft:"20px"}}>Send</Button>
                     </Form>
                 </div>
-            </Container>
+                </div>
         )
     }
 }
