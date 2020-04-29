@@ -6,7 +6,7 @@ import 'firebase/auth';
 // Replace this with your own config details
 //new config
 var config = {
-    apiKey: "AIzaSyBBGE44-e01QW2X5lEjXKb37UAdOVW3da4",
+    apiKey: YOUR_API_KEY,
     authDomain: "project-manager-68103.firebaseapp.com",
     databaseURL: "https://project-manager-68103.firebaseio.com",
     projectId: "project-manager-68103",
